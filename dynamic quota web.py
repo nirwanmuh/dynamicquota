@@ -63,7 +63,7 @@ class Kapal:
             return f"(Lantai 1) {msg}"
 
     def visualisasi(self):
-        st.markdown("<h3 style='text-align:center;'>Visualisasi Lantai Kapal</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align:center;'>Visualisasi Deck Kapal</h3>", unsafe_allow_html=True)
         layout = st.columns(len(self.lantai_list))
         for idx, lantai in enumerate(self.lantai_list):
             with layout[idx]:
@@ -81,7 +81,8 @@ class Kapal:
 
 # Streamlit app
 st.set_page_config(layout="wide")
-st.title("Dynamic Quota")
+# st.title("Dynamic Quota")
+st.title("<h3 style='text-align:center;'>Dynamic Quota</h3>")
 
 if "kapal" not in st.session_state:
     st.session_state.kapal = None
