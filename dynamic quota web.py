@@ -65,7 +65,7 @@ class Kapal:
 
 # Streamlit App
 st.set_page_config(layout="wide")
-st.title("🚢 Sistem Pemuatan Kendaraan Kapal Bertingkat (Web Version)")
+st.title("Dynamic Quota (Version 1.0)")
 
 if "kapal" not in st.session_state:
     st.session_state.kapal = None
@@ -87,7 +87,7 @@ if st.session_state.kapal is None:
         st.session_state.input_lantai[i]["lebar"] = st.sidebar.number_input(
             f"Lebar Lantai {i+1} (m)", min_value=3, max_value=30, value=st.session_state.input_lantai[i]["lebar"], key=f"l_{i}")
 
-    if st.sidebar.button("Mulai Kapal"):
+    if st.sidebar.button("Mulai"):
         data = [(d["panjang"], d["lebar"]) for d in st.session_state.input_lantai]
         st.session_state.kapal = Kapal(data)
         st.rerun()
