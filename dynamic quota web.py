@@ -81,8 +81,7 @@ class Kapal:
 
 # Streamlit app
 st.set_page_config(layout="wide")
-# st.title("Dynamic Quota")
-st.title("<h3 style='text-align:center;'>Dynamic Quota</h3>")
+st.title("Dynamic Quota")
 
 if "kapal" not in st.session_state:
     st.session_state.kapal = None
@@ -110,7 +109,7 @@ if st.session_state.kapal is None:
         st.rerun()
 else:
     st.sidebar.success("Kapal aktif ✅")
-    if st.sidebar.button("🔁 Reset"):
+    if st.sidebar.button("Reset"):
         st.session_state.kapal = None
         st.rerun()
 
