@@ -1,7 +1,4 @@
 import streamlit as st
-from typing import List
-
-st.set_page_config(page_title="Dynamic Quoata")
 
 KENDARAAN = {
     4: 5,
@@ -40,11 +37,11 @@ class LantaiKapal:
                 self.slot_panjang_tersisa[i] -= panjang_kendaraan
                 return True, f"Lantai ini slot {i+1}"
         return False, f"Tidak cukup ruang"
-        
+
     def keluarkan_kendaraan(self, gol):
         label = f"G{gol}"
+        panjang_kendaraan = KENDARAAN[gol]
         for kolom_index in range(self.slot_count):
-            panjang_kendaraan = KENDARAAN[gol]
             for row_index in range(self.panjang - panjang_kendaraan + 1):
                 if all(self.grid[row_index + j][kolom_index] == label for j in range(panjang_kendaraan)):
                     for j in range(panjang_kendaraan):
@@ -52,7 +49,6 @@ class LantaiKapal:
                     self.slot_panjang_tersisa[kolom_index] += panjang_kendaraan
                     return True, f"Kendaraan golongan {gol} berhasil dikeluarkan dari Slot {kolom_index+1}"
         return False, f"Tidak ada kendaraan golongan {gol} ditemukan di lantai ini."
-        
 
     def get_kemungkinan_sisa(self):
         sisa = {}
@@ -63,7 +59,7 @@ class LantaiKapal:
 
 class Kapal:
     def __init__(self, lantai_defs):
-        self.lantai_list: List[LantaiKapal] = [LantaiKapal(p, l) for p, l in lantai_defs]
+        self.lantai_list = [LantaiKapal(p, l) for p, l in lantai_defs]
 
     def tambah_kendaraan(self, gol):
         if gol in [4, 5]:
@@ -92,9 +88,9 @@ class Kapal:
             if ok:
                 return True, f"(Lantai 1) {msg}"
             return False, f"Tidak ada kendaraan golongan {gol} ditemukan di lantai 1."
-    
+
     def visualisasi(self):
-        st.markdown("<h3 style='text-align:center;'>Visualisasi Deck Kapal</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align:center;'>Visualisasi Lantai Kapal</h3>", unsafe_allow_html=True)
         layout = st.columns(len(self.lantai_list))
         for idx, lantai in enumerate(self.lantai_list):
             with layout[idx]:
@@ -112,7 +108,7 @@ class Kapal:
 
 # Streamlit app
 st.set_page_config(layout="wide")
-st.title("Dynamic Quota")
+st.title("🚢 Sistem Pemuatan Kapal Bertingkat - Visualisasi Berwarna")
 
 if "kapal" not in st.session_state:
     st.session_state.kapal = None
@@ -120,7 +116,7 @@ if "kapal" not in st.session_state:
 if "input_lantai" not in st.session_state:
     st.session_state.input_lantai = []
 
-st.sidebar.header("Pengaturan Kapal")
+st.sidebar.header("📐 Pengaturan Kapal")
 
 if st.session_state.kapal is None:
     jumlah = st.sidebar.number_input("Jumlah lantai kapal", min_value=1, max_value=5, value=2)
@@ -130,17 +126,17 @@ if st.session_state.kapal is None:
     for i in range(jumlah):
         st.sidebar.markdown(f"**Lantai {i+1}**")
         st.session_state.input_lantai[i]["panjang"] = st.sidebar.number_input(
-            f"Panjang Lantai {i+1}", min_value=1, max_value=200, value=st.session_state.input_lantai[i]["panjang"], key=f"p_{i}")
+            f"Panjang Lantai {i+1}", min_value=1, max_value=100, value=st.session_state.input_lantai[i]["panjang"], key=f"p_{i}")
         st.session_state.input_lantai[i]["lebar"] = st.sidebar.number_input(
             f"Lebar Lantai {i+1}", min_value=3, max_value=30, value=st.session_state.input_lantai[i]["lebar"], key=f"l_{i}")
 
-    if st.sidebar.button("Mulai"):
+    if st.sidebar.button("🚀 Mulai Kapal"):
         data = [(d["panjang"], d["lebar"]) for d in st.session_state.input_lantai]
         st.session_state.kapal = Kapal(data)
         st.rerun()
 else:
     st.sidebar.success("Kapal aktif ✅")
-    if st.sidebar.button("Reset"):
+    if st.sidebar.button("🔁 Reset"):
         st.session_state.kapal = None
         st.rerun()
 
@@ -149,7 +145,7 @@ else:
     if st.sidebar.button("Tambah"):
         hasil = st.session_state.kapal.tambah_kendaraan(gol)
         st.success(hasil)
-        
+
     st.sidebar.markdown("### ❌ Keluarkan Kendaraan")
     gol_del = st.sidebar.selectbox("Pilih Golongan yang Akan Dikeluarkan", list(KENDARAAN.keys()))
     if st.sidebar.button("Keluarkan"):
