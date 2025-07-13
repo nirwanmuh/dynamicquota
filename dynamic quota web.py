@@ -149,6 +149,15 @@ else:
     if st.sidebar.button("Tambah"):
         hasil = st.session_state.kapal.tambah_kendaraan(gol)
         st.success(hasil)
+        
+    st.sidebar.markdown("### ❌ Keluarkan Kendaraan")
+    gol_del = st.sidebar.selectbox("Pilih Golongan yang Akan Dikeluarkan", list(KENDARAAN.keys()))
+    if st.sidebar.button("Keluarkan"):
+        ok, msg = st.session_state.kapal.keluarkan_kendaraan(gol_del)
+        if ok:
+            st.success(msg)
+        else:
+            st.error(msg)
 
     st.sidebar.markdown("### ℹ️ Info Sisa Muat")
     for i, lantai in enumerate(st.session_state.kapal.lantai_list):
