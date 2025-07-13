@@ -40,6 +40,19 @@ class LantaiKapal:
                 self.slot_panjang_tersisa[i] -= panjang_kendaraan
                 return True, f"Lantai ini slot {i+1}"
         return False, f"Tidak cukup ruang"
+        
+    def keluarkan_kendaraan(self, gol):
+        label = f"G{gol}"
+        for kolom_index in range(self.slot_count):
+            panjang_kendaraan = KENDARAAN[gol]
+            for row_index in range(self.panjang - panjang_kendaraan + 1):
+                if all(self.grid[row_index + j][kolom_index] == label for j in range(panjang_kendaraan)):
+                    for j in range(panjang_kendaraan):
+                        self.grid[row_index + j][kolom_index] = '.'
+                    self.slot_panjang_tersisa[kolom_index] += panjang_kendaraan
+                    return True, f"Kendaraan golongan {gol} berhasil dikeluarkan dari Slot {kolom_index+1}"
+        return False, f"Tidak ada kendaraan golongan {gol} ditemukan di lantai ini."
+        
 
     def get_kemungkinan_sisa(self):
         sisa = {}
@@ -64,6 +77,22 @@ class Kapal:
             ok, msg = self.lantai_list[0].tambah_kendaraan(gol)
             return f"(Lantai 1) {msg}"
 
+    def keluarkan_kendaraan(self, gol):
+        if gol in [4, 5]:
+            ok, msg = self.lantai_list[0].keluarkan_kendaraan(gol)
+            if ok:
+                return True, f"(Lantai 1) {msg}"
+            for idx in range(1, len(self.lantai_list)):
+                ok, msg = self.lantai_list[idx].keluarkan_kendaraan(gol)
+                if ok:
+                    return True, f"(Lantai {idx+1}) {msg}"
+            return False, f"Tidak ada kendaraan golongan {gol} ditemukan di kapal."
+        else:
+            ok, msg = self.lantai_list[0].keluarkan_kendaraan(gol)
+            if ok:
+                return True, f"(Lantai 1) {msg}"
+            return False, f"Tidak ada kendaraan golongan {gol} ditemukan di lantai 1."
+    
     def visualisasi(self):
         st.markdown("<h3 style='text-align:center;'>Visualisasi Deck Kapal</h3>", unsafe_allow_html=True)
         layout = st.columns(len(self.lantai_list))
