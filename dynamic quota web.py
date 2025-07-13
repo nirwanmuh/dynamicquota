@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.set_page_config(page_title="Dynamic Quoata")
+
 KENDARAAN = {
     4: 5,
     5: 7,
@@ -118,7 +120,7 @@ class Kapal:
 
 # Streamlit app
 st.set_page_config(layout="wide")
-st.title("🚢 Sistem Pemuatan Kapal Bertingkat - Visualisasi Berwarna")
+st.title("Dynamic Quota")
 
 if "kapal" not in st.session_state:
     st.session_state.kapal = None
@@ -126,7 +128,7 @@ if "kapal" not in st.session_state:
 if "input_lantai" not in st.session_state:
     st.session_state.input_lantai = []
 
-st.sidebar.header("📀 Pengaturan Kapal")
+st.sidebar.header("Pengaturan Kapal")
 
 if st.session_state.kapal is None:
     jumlah = st.sidebar.number_input("Jumlah lantai kapal", min_value=1, max_value=5, value=2)
@@ -136,17 +138,17 @@ if st.session_state.kapal is None:
     for i in range(jumlah):
         st.sidebar.markdown(f"**Lantai {i+1}**")
         st.session_state.input_lantai[i]["panjang"] = st.sidebar.number_input(
-            f"Panjang Lantai {i+1}", min_value=1, max_value=100, value=st.session_state.input_lantai[i]["panjang"], key=f"p_{i}")
+            f"Panjang Lantai {i+1}", min_value=1, max_value=200, value=st.session_state.input_lantai[i]["panjang"], key=f"p_{i}")
         st.session_state.input_lantai[i]["lebar"] = st.sidebar.number_input(
             f"Lebar Lantai {i+1}", min_value=3, max_value=30, value=st.session_state.input_lantai[i]["lebar"], key=f"l_{i}")
 
-    if st.sidebar.button("🚀 Mulai Kapal"):
+    if st.sidebar.button("Mulai"):
         data = [(d["panjang"], d["lebar"]) for d in st.session_state.input_lantai]
         st.session_state.kapal = Kapal(data)
         st.rerun()
 else:
     st.sidebar.success("Kapal aktif ✅")
-    if st.sidebar.button("🔁 Reset"):
+    if st.sidebar.button("Reset"):
         st.session_state.kapal = None
         st.rerun()
 
