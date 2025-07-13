@@ -23,21 +23,19 @@ class LantaiKapal:
         self.panjang = panjang
         self.lebar = lebar
         self.slot_count = lebar // 3
-        self.slot_panjang_tersisa = [panjang] * self.slot_count
         self.grid = [['.' for _ in range(self.slot_count)] for _ in range(panjang)]
 
-def tambah_kendaraan(self, gol):
-    panjang_kendaraan = KENDARAAN[gol]
-    label = f"G{gol}"
-    for i in range(self.slot_count):
-        for start_row in range(self.panjang - panjang_kendaraan, -1, -1):
-            # Cek apakah blok sepanjang panjang_kendaraan kosong dari start_row ke atas
-            if all(self.grid[start_row + j][i] == '.' for j in range(panjang_kendaraan)):
-                for j in range(panjang_kendaraan):
-                    self.grid[start_row + j][i] = label
-                return True, f"Lantai ini slot {i+1}"
-    return False, f"Tidak cukup ruang"
-    
+    def tambah_kendaraan(self, gol):
+        panjang_kendaraan = KENDARAAN[gol]
+        label = f"G{gol}"
+        for i in range(self.slot_count):
+            for start_row in range(self.panjang - panjang_kendaraan, -1, -1):
+                if all(self.grid[start_row + j][i] == '.' for j in range(panjang_kendaraan)):
+                    for j in range(panjang_kendaraan):
+                        self.grid[start_row + j][i] = label
+                    return True, f"Lantai ini slot {i+1}"
+        return False, f"Tidak cukup ruang"
+
     def keluarkan_kendaraan(self, gol):
         label = f"G{gol}"
         panjang_kendaraan = KENDARAAN[gol]
@@ -46,14 +44,17 @@ def tambah_kendaraan(self, gol):
                 if all(self.grid[row_index + j][kolom_index] == label for j in range(panjang_kendaraan)):
                     for j in range(panjang_kendaraan):
                         self.grid[row_index + j][kolom_index] = '.'
-                    self.slot_panjang_tersisa[kolom_index] += panjang_kendaraan
                     return True, f"Kendaraan golongan {gol} berhasil dikeluarkan dari Slot {kolom_index+1}"
         return False, f"Tidak ada kendaraan golongan {gol} ditemukan di lantai ini."
 
     def get_kemungkinan_sisa(self):
         sisa = {}
         for gol, panjang in KENDARAAN.items():
-            total = sum(slot // panjang for slot in self.slot_panjang_tersisa)
+            total = 0
+            for i in range(self.slot_count):
+                for start in range(self.panjang - panjang + 1):
+                    if all(self.grid[start + j][i] == '.' for j in range(panjang)):
+                        total += 1
             sisa[gol] = total
         return sisa
 
@@ -116,7 +117,7 @@ if "kapal" not in st.session_state:
 if "input_lantai" not in st.session_state:
     st.session_state.input_lantai = []
 
-st.sidebar.header("📐 Pengaturan Kapal")
+st.sidebar.header("📀 Pengaturan Kapal")
 
 if st.session_state.kapal is None:
     jumlah = st.sidebar.number_input("Jumlah lantai kapal", min_value=1, max_value=5, value=2)
