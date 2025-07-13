@@ -48,14 +48,23 @@ class LantaiKapal:
         return False, f"Tidak ada kendaraan golongan {gol} ditemukan di lantai ini."
 
     def get_kemungkinan_sisa(self):
-        sisa = {}
-        for gol, panjang in KENDARAAN.items():
-            total = 0
-            for i in range(self.slot_count):
-                for start in range(self.panjang - panjang + 1):
-                    if all(self.grid[start + j][i] == '.' for j in range(panjang)):
-                        total += 1
-            sisa[gol] = total
+        sisa = {gol: 0 for gol in KENDARAAN.keys()}
+    
+        for i in range(self.slot_count):  # Untuk setiap kolom
+            row = self.panjang - 1
+            while row >= 0:
+                if self.grid[row][i] == '.':
+                    # Hitung panjang berturut-turut kosong ke atas
+                    kosong = 0
+                    while row >= 0 and self.grid[row][i] == '.':
+                        kosong += 1
+                        row -= 1
+                    # Hitung berapa kendaraan yang bisa muat dari segmen kosong ini
+                    for gol, panjang in KENDARAAN.items():
+                        if kosong >= panjang:
+                            sisa[gol] += kosong // panjang
+                else:
+                    row -= 1  # Skip sel yang terisi
         return sisa
 
 class Kapal:
