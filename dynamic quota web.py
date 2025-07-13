@@ -1,6 +1,8 @@
 import streamlit as st
 from typing import List
 
+st.set_page_config(page_title="Dynamic Quoata")
+
 KENDARAAN = {
     4: 5,
     5: 7,
