@@ -26,18 +26,18 @@ class LantaiKapal:
         self.slot_panjang_tersisa = [panjang] * self.slot_count
         self.grid = [['.' for _ in range(self.slot_count)] for _ in range(panjang)]
 
-    def tambah_kendaraan(self, gol):
-        panjang_kendaraan = KENDARAAN[gol]
-        label = f"G{gol}"
-        for i in range(self.slot_count):
-            if self.slot_panjang_tersisa[i] >= panjang_kendaraan:
-                start = self.panjang - self.slot_panjang_tersisa[i]
-                for j in range(start, start + panjang_kendaraan):
-                    self.grid[j][i] = label
-                self.slot_panjang_tersisa[i] -= panjang_kendaraan
+def tambah_kendaraan(self, gol):
+    panjang_kendaraan = KENDARAAN[gol]
+    label = f"G{gol}"
+    for i in range(self.slot_count):
+        for start_row in range(self.panjang - panjang_kendaraan, -1, -1):
+            # Cek apakah blok sepanjang panjang_kendaraan kosong dari start_row ke atas
+            if all(self.grid[start_row + j][i] == '.' for j in range(panjang_kendaraan)):
+                for j in range(panjang_kendaraan):
+                    self.grid[start_row + j][i] = label
                 return True, f"Lantai ini slot {i+1}"
-        return False, f"Tidak cukup ruang"
-
+    return False, f"Tidak cukup ruang"
+    
     def keluarkan_kendaraan(self, gol):
         label = f"G{gol}"
         panjang_kendaraan = KENDARAAN[gol]
