@@ -138,9 +138,9 @@ if st.session_state.kapal is None:
     for i in range(jumlah):
         st.sidebar.markdown(f"**Lantai {i+1}**")
         st.session_state.input_lantai[i]["panjang"] = st.sidebar.number_input(
-            f"Panjang Lantai {i+1}", min_value=1, max_value=200, value=st.session_state.input_lantai[i]["panjang"], key=f"p_{i}")
+            f"Panjang Lantai {i+1} (meter)", min_value=1, max_value=200, value=st.session_state.input_lantai[i]["panjang"], key=f"p_{i}")
         st.session_state.input_lantai[i]["lebar"] = st.sidebar.number_input(
-            f"Lebar Lantai {i+1}", min_value=3, max_value=30, value=st.session_state.input_lantai[i]["lebar"], key=f"l_{i}")
+            f"Lebar Lantai {i+1} (meter)", min_value=3, max_value=30, value=st.session_state.input_lantai[i]["lebar"], key=f"l_{i}")
 
     if st.sidebar.button("Mulai"):
         data = [(d["panjang"], d["lebar"]) for d in st.session_state.input_lantai]
