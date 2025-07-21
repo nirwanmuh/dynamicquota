@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Dynamic Quoata", layout="centered")
+st.set_page_config(page_title="Dynamic Quoata")
 
 KENDARAAN = {
     4: 5,
@@ -52,7 +52,7 @@ class LantaiKapal:
     def get_kemungkinan_sisa(self):
         sisa = {gol: 0 for gol in KENDARAAN.keys()}
     
-        for i in range(self.slot_count):  # Untuk setiap kolom
+        for i in range(self.slot_count):  # Untuk iap kolom
             row = self.panjang - 1
             while row >= 0:
                 if self.grid[row][i] == '.':
@@ -119,7 +119,7 @@ class Kapal:
                 st.markdown(html_grid, unsafe_allow_html=True)
 
 # Streamlit app
-st.set_page_config(layout="wide")
+st.set_page_config(layout="centered")
 st.title("Dynamic Quota")
 
 if "kapal" not in st.session_state:
