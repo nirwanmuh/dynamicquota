@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Dynamic Quoata")
+st.set_page_config(page_title="Dynamic Quoata", layout="centered")
 
 KENDARAAN = {
     4: 5,
